@@ -1,0 +1,45 @@
+{
+  "name": "acharya-stdio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "server": "node --env-file-if-exists=.env server/index.mjs",
+    "build": "tsc -b && vite build",
+    "typecheck": "tsc -b",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:e2e": "playwright test",
+    "format": "prettier --write src server tests *.ts *.js",
+    "test:server": "node --test server/*.test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
+    "express": "^4.21.0",
+    "express-rate-limit": "^7.5.0",
+    "fflate": "^0.8.3",
+    "idb": "^8.0.0",
+    "lucide-react": "^0.468.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.50.0",
+    "@sparticuz/chromium": "^153.0.0",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.17.0",
+    "prettier": "^3.9.10",
+    "typescript": "~5.7.2",
+    "typescript-eslint": "^8.19.0",
+    "vite": "^6.0.5",
+    "vitest": "^5.0.4"
+  }
+}

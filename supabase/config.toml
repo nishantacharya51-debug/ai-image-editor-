@@ -1,0 +1,4 @@
+[functions.ai-gateway]
+# The function verifies the user's JWT with auth.getUser itself. This also
+# supports modern publishable keys without trusting gateway JWT decoding.
+verify_jwt = false

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+<title>Acharya Stdio — enchanted A crest</title>
+<defs><linearGradient id="rune" x1="15" y1="9" x2="48" y2="55" gradientUnits="userSpaceOnUse"><stop stop-color="#F1E0A3"/><stop offset=".5" stop-color="#DBEDAF"/><stop offset="1" stop-color="#99C079"/></linearGradient></defs>
+<rect width="64" height="64" rx="18" fill="#20271E"/>
+<path d="M12 36c0-10 5-18 13-22-5 5-8 11-8 18 0 10 5 18 13 22-11-2-18-9-18-18Z" fill="url(#rune)" opacity=".7"/>
+<path d="M52 36c0-10-5-18-13-22 5 5 8 11 8 18 0 10-5 18-13 22 11-2 18-9 18-18Z" fill="url(#rune)" opacity=".7"/>
+<path d="m20 44 10-25h4l10 25h-6l-2-6h-8l-2 6h-6Zm10-11h4l-2-7-2 7Z" fill="url(#rune)" fill-rule="evenodd"/>
+<path d="m32 6 2.1 5.9L40 14l-5.9 2.1L32 22l-2.1-5.9L24 14l5.9-2.1L32 6Z" fill="#E9D69E"/>
+<path d="m32 45 2 4-2 5-2-5 2-4Z" fill="#D3E7A6"/>
+<path d="m6 30 1.2 2.8L10 34l-2.8 1.2L6 38l-1.2-2.8L2 34l2.8-1.2L6 30Zm52 0 1.2 2.8L62 34l-2.8 1.2L58 38l-1.2-2.8L54 34l2.8-1.2L58 30Z" fill="#CBDEA1" opacity=".65"/>
+</svg>
