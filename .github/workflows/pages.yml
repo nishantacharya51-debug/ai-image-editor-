@@ -1,7 +1,5 @@
 name: Publish Acharya Stdio
 on:
-  push:
-    branches: ["arena/928435d6-ai-image-editor"]
   workflow_dispatch:
 permissions:
   contents: read

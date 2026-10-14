@@ -13,7 +13,8 @@
     "preview": "vite preview --host 0.0.0.0",
     "test:e2e": "playwright test",
     "format": "prettier --write src server tests *.ts *.js",
-    "test:server": "node --test server/*.test.mjs"
+    "test:server": "node --test server/*.test.mjs",
+    "publish:pages": "node scripts/publish-pages.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

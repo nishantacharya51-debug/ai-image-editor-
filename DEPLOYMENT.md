@@ -8,26 +8,37 @@ The repository is public and the frontend is configured for this target address:
 
 `https://nishantacharya51-debug.github.io/ai-image-editor-/`
 
-This address is a deployment target, **not proof that publishing has finished**. On October 14, 2026, the connected GitHub integration returned HTTP 403 (`Resource not accessible by integration`) when asked to enable Pages. No Pages site was reported by the subsequent status lookup.
+## Current publishing mode: branch root
 
-The workflow is `.github/workflows/pages.yml` and publishes from the fixed working branch `arena/928435d6-ai-image-editor`.
+GitHub Pages is enabled for branch `arena/928435d6-ai-image-editor`, folder `/` (repository root). The root now contains the **compiled production website**, not the Vite/TypeScript source entry. `.nojekyll` keeps Pages from processing these static assets.
 
-### Owner's one-time action
+To update the public website:
 
-1. Open https://github.com/nishantacharya51-debug/ai-image-editor-/settings/pages
-2. Under **Build and deployment**, choose **GitHub Actions** as the source.
-3. Open the repository's **Actions** tab, select **Publish Acharya Stdio**, and rerun the latest workflow from `arena/928435d6-ai-image-editor` if the first run failed before Pages was enabled.
-4. Wait for the deploy job to succeed. GitHub will show the confirmed site URL in Settings → Pages and in the deployment job.
+```sh
+npm ci
+npm run publish:pages
+git add .
+git commit -m "Update published website"
+git push origin arena/928435d6-ai-image-editor
+```
 
-Alternatively, reconnect GitHub in Arena with the Pages and repository administration permissions needed to enable this site. Do not paste GitHub access tokens into chat.
+GitHub automatically runs **pages build and deployment** when this source branch changes. Confirm that run succeeds before treating a new version as live.
 
-The Pages build uses `/ai-image-editor-/` as its asset base and hash routing (`#/editor`, `#/login`, etc.) so direct links and reloads work without a custom server. All local editing, backups, recipes, analysis, and exports work independently of the cloud backend.
+- Editable HTML template: `web/index.html`
+- React source: `src/`
+- Generated root HTML, `assets/`, `fonts/`, and `images/`: deployment artifacts; do not hand-edit.
+- `scripts/publish-pages.mjs`: builds with the correct `/ai-image-editor-/` base, copies the static build to the publishing root, and tracks generated files in `.pages-files.json`.
+- `npm run dev` still runs the source app using `web/index.html`.
+
+The optional `.github/workflows/pages.yml` workflow is now manual-only to avoid racing the branch-based publisher. You do **not** need to switch Pages to GitHub Actions for the current deployment.
+
+The compiled frontend uses hash routes (`#/editor`, `#/account`) so direct links and reloads work without a backend server.
 
 ## Activate online accounts and per-user Gemini keys
 
 The frontend does not create a Supabase project by itself. Follow **`supabase/README.md`** to apply the SQL migration, configure email authentication and delivery, set the server-only encryption secret and allowed origin, and deploy the `ai-gateway` Edge Function.
 
-Then add these **public** GitHub repository Actions variables and rebuild:
+Then put these **public** values in your local untracked `.env` before running `npm run publish:pages` again (or use Actions variables if you intentionally switch to the optional workflow):
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`

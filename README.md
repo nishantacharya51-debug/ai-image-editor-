@@ -2,7 +2,7 @@
 
 **Designed and developed by Nishant Acharya.** The latest version includes a fantasy-inspired A crest, an animated first-workspace Gemini welcome, optional Supabase email accounts with encrypted per-user API keys, portable project backups, import/export editing recipes, and measured one-click Auto Balance.
 
-**Publishing:** see [DEPLOYMENT.md](DEPLOYMENT.md) for the GitHub Pages workflow and the required owner action. The connected integration cannot enable Pages (HTTP 403), and no public deployment is claimed until the deploy job succeeds. **Online accounts require your own configured free Supabase project**; follow [supabase/README.md](supabase/README.md). Local editing is fully usable without that backend.
+**Publishing:** GitHub Pages now uses the compiled files at this branch's root. See [DEPLOYMENT.md](DEPLOYMENT.md); rebuild with `npm run publish:pages` and push this branch to publish changes. Source HTML lives in `web/index.html`. **Online accounts require your own configured free Supabase project**; follow [supabase/README.md](supabase/README.md). Local editing is fully usable without that backend.
 
 A working, local-first photo editing application built from this repository's original README-only starting point. React 19, TypeScript, Vite, Canvas, a pixel-processing Web Worker, IndexedDB, and an **optional** Express/Gemini service. No paid service is needed for local editing.
 

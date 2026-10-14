@@ -65,6 +65,8 @@ Supabase's built-in email sender is restricted to authorized addresses and low r
 
 ## 6. Connect the frontend
 
+**Current branch-root publishing:** add the two public values below to your local untracked `.env`, run `npm run publish:pages`, then commit and push the generated site on `arena/928435d6-ai-image-editor`. GitHub Pages automatically redeploys this branch. The Actions-variable method below is an alternative only if you switch Pages to the optional Actions workflow.
+
 In GitHub repository Settings → Secrets and variables → Actions → **Variables**, add:
 
 ```text
