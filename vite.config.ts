@@ -25,6 +25,9 @@ export default defineConfig(({ mode }) => {
     publicDir: path.resolve("public"),
     build: { outDir: path.resolve("dist"), emptyOutDir: true },
     plugins: [react()],
+    // The editable entry lives in web/, while React source stays in src/.
+    // Resolve its browser URL in dev as well as in the production build.
+    resolve: { alias: { "/src": path.resolve("src") } },
     base: env.VITE_APP_BASE || "/",
     server: {
       host: "0.0.0.0",
@@ -34,6 +37,10 @@ export default defineConfig(({ mode }) => {
       },
     },
     preview: { host: "0.0.0.0", allowedHosts: true },
-    test: { root: process.cwd(), environment: "node", include: ["src/**/*.test.ts"] },
+    test: {
+      root: process.cwd(),
+      environment: "node",
+      include: ["src/**/*.test.ts"],
+    },
   };
 });

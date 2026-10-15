@@ -34,6 +34,7 @@ const NotFound = lazy(() =>
 const AuthPage = lazy(() =>
   import("./pages/Account").then((m) => ({ default: m.AuthPage })),
 );
+const AuthCallback = lazy(() => import("./pages/AuthCallback"));
 const Account = lazy(() =>
   import("./pages/Account").then((m) => ({ default: m.Account })),
 );
@@ -42,7 +43,7 @@ const CloudSetup = lazy(() =>
 );
 const Router = isGitHubPages ? HashRouter : BrowserRouter;
 function Layout() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   const editor = pathname === "/editor" || pathname.startsWith("/editor/");
   useEffect(() => {
     getPreference("reducedMotion", false)
@@ -85,6 +86,10 @@ function Layout() {
           <Route
             path="/reset-password"
             element={<AuthPage key="reset" mode="reset" />}
+          />
+          <Route
+            path="/auth/callback"
+            element={<AuthCallback key={`${pathname}${search}`} />}
           />
           <Route path="/account" element={<Account />} />
           <Route path="/setup" element={<CloudSetup />} />

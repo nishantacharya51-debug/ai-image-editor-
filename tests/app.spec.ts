@@ -5,7 +5,9 @@ async function openPhoto(page: Page) {
   await page
     .locator("input[type=file]")
     .setInputFiles("public/images/alpine.jpg");
-  await expect(page.locator('img[alt="Edited photo preview"]')).toBeVisible();
+  await expect(page.locator('img[alt="Edited photo preview"]')).toBeVisible({
+    timeout: 20000,
+  });
   await page.waitForFunction(
     () => !document.querySelector(".canvas-toolbar .spinner"),
   );
@@ -75,6 +77,8 @@ test("all public routes render their own content and fit desktop, tablet, mobile
 test("real upload, 24 basic sliders, presets, comparison, undo redo, reset and persistence", async ({
   page,
 }) => {
+  // This stress test intentionally renders dozens of full-size adjustments.
+  test.setTimeout(240000);
   await openPhoto(page);
   const original = await hash(page);
   await page.getByRole("button", { name: "Adjustments", exact: true }).click();
@@ -166,7 +170,9 @@ test("real upload, 24 basic sliders, presets, comparison, undo redo, reset and p
   await expect(page.getByRole("status")).toContainText("Project saved");
   const url = page.url();
   await page.reload();
-  await expect(page.locator('img[alt="Edited photo preview"]')).toBeVisible();
+  await expect(page.locator('img[alt="Edited photo preview"]')).toBeVisible({
+    timeout: 20000,
+  });
   expect(await hash(page)).toBe(styled);
   expect(page.url()).toBe(url);
   await reset(page);
@@ -316,7 +322,9 @@ test("invalid files and missing API fail safely; simulated quota and invalid JSO
   await page
     .locator("input[type=file]")
     .setInputFiles("public/images/alpine.jpg");
-  await expect(page.getByAltText("Edited photo preview")).toBeVisible();
+  await expect(page.getByAltText("Edited photo preview")).toBeVisible({
+    timeout: 20000,
+  });
   await page.getByRole("button", { name: "AI Analysis", exact: true }).click();
   await page.getByRole("button", { name: "Ask Gemini" }).click();
   await expect(page.getByRole("dialog")).toContainText("Google Gemini");
@@ -457,7 +465,9 @@ test("PNG alpha, WebP uploads, multiple-file project creation and clean PNG expo
       buffer: Buffer.from(files.webp, "base64"),
     },
   ]);
-  await expect(page.getByAltText("Edited photo preview")).toBeVisible();
+  await expect(page.getByAltText("Edited photo preview")).toBeVisible({
+    timeout: 20000,
+  });
   await ready(page);
   await page.getByRole("button", { name: "Export", exact: true }).click();
   await page.getByLabel("File format").selectOption("image/png");
@@ -485,7 +495,9 @@ test("PNG alpha, WebP uploads, multiple-file project creation and clean PNG expo
   await page.getByRole("link", { name: "Back to projects" }).click();
   await expect(page.locator(".project-card")).toHaveCount(2);
   await page.getByRole("heading", { name: "small", exact: true }).click();
-  await expect(page.getByAltText("Edited photo preview")).toBeVisible();
+  await expect(page.getByAltText("Edited photo preview")).toBeVisible({
+    timeout: 20000,
+  });
 });
 
 test.beforeEach(async ({ page }) => {

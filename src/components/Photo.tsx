@@ -21,10 +21,31 @@ export function EditedPhoto({
   maxSize?: number;
 }) {
   const ref = useRef<HTMLCanvasElement>(null);
+  const container = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
   useEffect(() => {
+    if (!container.current || !("IntersectionObserver" in window)) {
+      setVisible(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "100px" },
+    );
+    observer.observe(container.current);
+    return () => observer.disconnect();
+  }, []);
+  useEffect(() => {
+    if (!visible) return;
     let live = true;
     const image = new Image();
     image.onload = async () => {
+      if (!live) return;
       try {
         const state = edit ?? {
           ...initialEdit(),
@@ -44,10 +65,10 @@ export function EditedPhoto({
     return () => {
       live = false;
     };
-  }, [src, preset, edit, maxSize]);
+  }, [src, preset, edit, maxSize, visible]);
   return (
-    <div className={`edited-photo ${className}`}>
-      <img src={src} alt="" />
+    <div ref={container} className={`edited-photo ${className}`}>
+      <img src={src} alt="" loading="lazy" />
       <canvas ref={ref} role="img" aria-label={alt} />
     </div>
   );
@@ -113,6 +134,7 @@ export function PresetCard({
         <EditedPhoto
           src={assetUrl(`images/${preset.image}.jpg`)}
           preset={preset}
+          maxSize={240}
           alt={`${preset.name} example`}
         />
         <span className="photo-category">{preset.category}</span>

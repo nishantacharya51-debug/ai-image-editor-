@@ -91,6 +91,9 @@ test("configured Supabase UI signs up, logs in/out, restores session and reuses 
   await page.getByLabel("Email address").fill("first@example.test");
   await page.getByLabel("Password", { exact: true }).fill("fake-password-123");
   await page
+    .getByLabel("Confirm password", { exact: true })
+    .fill("fake-password-123");
+  await page
     .getByRole("button", { name: "Create free account", exact: true })
     .click();
   await expect(page.getByRole("status")).toContainText("Check your email");

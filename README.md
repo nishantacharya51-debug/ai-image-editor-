@@ -38,6 +38,8 @@ Static-only production preview: `npm run preview`. It intentionally does not inc
 
 ## What works
 
+- Optional Supabase signup/login/logout with matching-password validation, visibility toggle, confirmation resend, email cooldown, password recovery, session persistence, and explicit GitHub Pages-safe PKCE callbacks. Requires public project configuration and Auth/email settings; live activation is not automatic. See the [account quick start](supabase/README.md#quick-start-login-and-signup-only).
+
 - JPEG, PNG, WebP upload via picker, drag/drop, and image clipboard paste. Up to eight files create individual local projects. MIME, magic-byte signature, decoding, 30 MB size and 40 MP dimension checks. Browser EXIF orientation handling.
 - Original image blobs are preserved. Changes are typed parameters, always rendered from the original; previews are capped at 1400 px. Preset thumbnails use 240 px previews. CPU-intensive per-pixel grading runs in a dedicated worker and preview updates are debounced.
 - Exposure (stops), brightness, contrast, saturation, vibrance, temperature, tint, highlights, shadows, whites, blacks, gamma, hue, RGB balance, split toning, sharpness, blur, fade, vignette, procedural grain and approximate clarity.

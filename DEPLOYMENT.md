@@ -36,7 +36,7 @@ The compiled frontend uses hash routes (`#/editor`, `#/account`) so direct links
 
 ## Activate online accounts and per-user Gemini keys
 
-The frontend does not create a Supabase project by itself. Follow **`supabase/README.md`** to apply the SQL migration, configure email authentication and delivery, set the server-only encryption secret and allowed origin, and deploy the `ai-gateway` Edge Function.
+The frontend does not create or automatically discover a Supabase project. For **login/signup only**, follow the quick start in **`supabase/README.md`**: enable Email Auth, configure Site URL and both confirmation/recovery callbacks, and set up email delivery. The SQL migration and `ai-gateway` Edge Function are needed only for **optional encrypted personal Gemini-key storage**, not basic accounts. Connecting Supabase to GitHub alone does not activate the frontend.
 
 Then put these **public** values in your local untracked `.env` before running `npm run publish:pages` again (or use Actions variables if you intentionally switch to the optional workflow):
 

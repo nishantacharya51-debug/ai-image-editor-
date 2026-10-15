@@ -5279,3 +5279,27 @@ code {
     display: none;
   }
 }
+
+.password-toggle {
+  display: block;
+  border: 0;
+  background: none;
+  padding: 3px 0;
+  margin: 0 0 18px;
+  font-size: 13px;
+}
+.resend-confirmation {
+  margin-top: 12px;
+}
+.account-actions {
+  flex-wrap: wrap;
+}
+.account-actions .button {
+  max-width: 100%;
+  white-space: normal;
+  text-align: center;
+}
+.account-summary p,
+.auth-card .notice {
+  overflow-wrap: anywhere;
+}

@@ -2,6 +2,37 @@
 
 The static GitHub Pages frontend cannot store secrets or run authentication servers. This optional backend provides real **Supabase Auth** login and a verified-user Edge Function. Local editing remains available without it. No Supabase project was created or deployed by the coding session; you must own and configure one.
 
+## Quick start: login and signup only
+
+Use your **existing Supabase project**. Its GitHub integration does not automatically inject configuration into this static website. Authentication does **not** require our Gemini tables, SQL migration, or Edge Function.
+
+1. In **Project Settings → API Keys**, find the Project URL and **publishable** key. Put only these public values in the local, ignored `.env`:
+   ```dotenv
+   VITE_SUPABASE_URL=https://YOUR_PROJECT_REF.supabase.co
+   VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_YOUR_PUBLIC_KEY
+   ```
+   Never use a secret/service-role key, database connection string/password, or Gemini key. The build rejects known Supabase secret/service-role keys.
+2. In **Authentication → Providers**, enable Email, keep email confirmation enabled, and set a minimum password length of **8 or stronger**. The app validates matching passwords; Supabase must enforce the actual password policy server-side.
+3. In **Authentication → URL Configuration**, set Site URL to:
+   ```text
+   https://nishantacharya51-debug.github.io/ai-image-editor-/
+   ```
+   Add these two allowed redirect URLs:
+   ```text
+   https://nishantacharya51-debug.github.io/ai-image-editor-/#/auth/callback
+   https://nishantacharya51-debug.github.io/ai-image-editor-/#/auth/callback?next=reset
+   ```
+   For local development use the equivalent `/auth/callback` and `/auth/callback?next=reset` URLs on the exact development origin. If you enable the SDK's optional PKCE flow-ID redirect feature later, update your allowlist for its extra query parameter; this app does not enable that option.
+4. Configure Auth email delivery for public users. The default Supabase mail sender is restricted; merely linking GitHub will not enable public email. No SMTP account was provisioned here. For an initial login test you can create a confirmed test user you control in Supabase Auth, without disabling confirmations for production.
+5. Run `npm run publish:pages`, commit the generated root files, and push **`arena/928435d6-ai-image-editor`**. This deployment uses branch-root Pages; repository Actions variables alone will **not** change it. Restart Vite after editing `.env` for development.
+6. Test signup → email confirmation → logout → login → reload, then forgot password → email link → update password. For standard PKCE emails, open the link in the **same browser/device** that requested it. If a link expires or browser storage was cleared, request a fresh link. The app removes one-time callback data from the address bar before rendering and allows only internal account/recovery destinations.
+
+The app supports signup confirmation resend, a 60-second UI email cooldown (not a replacement for Supabase server rate limits), password visibility and confirmation, safe error messages, session persistence, and recovery. A custom email template may send `token_hash` with `type=signup`, `email`, or `recovery` to the callback; these are verified with Supabase and can work across browsers. Default templates are not changed by this repository. Never log or share email verification tokens.
+
+**Verification boundary:** automated browser tests use intercepted, fake Supabase responses and the real SDK. They do not create live accounts, prove SMTP delivery, or validate your project's settings. Public project configuration was deferred by the owner; no claim of live authentication activation is made.
+
+The remaining sections describe the **optional encrypted Gemini-key backend**, which can be configured after login works.
+
 ## 1. Create a free project
 
 Create a project in an organization on **Supabase Free**, without enabling a paid plan. Record its project reference. In Project Settings → API find:
@@ -58,7 +89,7 @@ npx supabase functions deploy ai-gateway --no-verify-jwt
 Enable **Email** authentication in Supabase Auth settings. Keep email confirmation enabled for a public deployment. Configure:
 
 - Site URL: `https://nishantacharya51-debug.github.io/ai-image-editor-/`
-- Allowed redirect URLs for the app's account and recovery routes. Allow the application's own Pages path, including `#/account` and `#/reset-password` callbacks. The SDK uses PKCE (`?code=...`) and exchanges that code in the browser.
+- Use the two `#/auth/callback` URLs in the quick start above. The app explicitly exchanges PKCE codes, handles recovery, and scrubs callback data from the browser URL.
 - For development, allow the corresponding exact frontend URLs.
 
 Supabase's built-in email sender is restricted to authorized addresses and low rate limits. **Public sign-up, confirmation, and recovery require a suitable SMTP provider** configured in Supabase Auth. Use a free tier you verify with its provider, or use test users you control for initial validation. No email service was silently provisioned, and no unlimited free delivery is promised. You can create a confirmed test user from the Supabase Auth dashboard to test login without sending confirmation mail. Do not weaken production email confirmation to bypass setup.
@@ -111,3 +142,19 @@ npx deno test supabase/functions/ai-gateway/crypto.test.ts
 ```
 
 These verify TypeScript and the pure encryption boundary. They do not deploy the backend or validate a live Supabase project.
+
+### Account browser tests (no live service)
+
+In a separate terminal, start a test-only Vite process (do not save these values to `.env` and do not publish this test build):
+
+```sh
+VITE_SUPABASE_URL=https://test-acharya.supabase.co VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_fake_test_only npm run dev -- --port 5174
+```
+
+Then run:
+
+```sh
+RUN_CLOUD_MOCKS=1 TEST_BASE_URL=http://127.0.0.1:5174 npx playwright test tests/auth-flows.spec.ts tests/cloud-auth.spec.ts
+```
+
+In the Arena sandbox, prefix that test command with `SANDBOX_CHROMIUM=1`. All requests to the fake Supabase host are intercepted by Playwright. For production hash-route verification, build with `VITE_APP_BASE=/ai-image-editor-/ VITE_GITHUB_PAGES=true` plus the same fake values, serve `dist` using `vite preview`, and run **only** `tests/auth-flows.spec.ts` with `TEST_AUTH_PAGES=1`, `RUN_CLOUD_MOCKS=1`, and the preview's `TEST_BASE_URL`. Rebuild without test values before publishing. The normal unconfigured production site must not contain `test-acharya.supabase.co` or the fake publishable key.
